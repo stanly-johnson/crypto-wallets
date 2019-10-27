@@ -1,4 +1,5 @@
-
+const RippleAPI = require('ripple-lib').RippleAPI;
+const keypairs = require('ripple-keypairs');
 /**
  * The function to create and broadcast a transaction to the XRP network
  * @param {String} senderAddress
@@ -65,10 +66,13 @@ export async function sendXrpTransaction(senderAddress, recipentAddress, amount_
 
 /**
  * The function will create an XRP HD wallet
+ * @param {String} mnemonic (Optional)
  */
-export function generateXrpWallet(){
+export function generateXrpWallet(mnemonic){
     //Generate an XRP wallet
     console.log('XRP wallet gen');
+    // Create an instance of bip32 wallet with bip39 mnemonics
+    const mnemonics = mnemonic ? mnemonic : generateRandomMnemonic();
     // create seed word with entropy 256 seed word
     const seed = keypairs.generateSeed({ entropy: bip39.mnemonicToSeed(mnemonics) });
     // generate the keypairs from the seed
@@ -110,4 +114,9 @@ export function getXrpBalanceOfAddress(account_address){
   } catch (error) {
     return 'failed to fetch data | is account initialised?';
   }
+}
+
+
+export function generateRandomMnemonic() {
+  return bip39.generateMnemonic(256);
 }
